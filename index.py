@@ -17,7 +17,6 @@ def connect_db():
 #insert_data_to_db for add table
 
 def insert_data_to_db(name, quantity, cp, sp):
-    print "i am here"
     query = "insert into medicine_details (name, quantity, cost_price, selling_price) \
              values ('%s', %d, %f, %f)" %(name, quantity, cp, sp)
     conn = connect_db()
@@ -28,13 +27,10 @@ def insert_data_to_db(name, quantity, cp, sp):
 
 #insert_data_to_db for signup 
 def insert_data_to_db(user_name,password):
-    print user_name, password
-    print "i am here"
     query = "insert into user_signup (name,password) values('%s','%s')" %(user_name,password)
     conn = connect_db()
     cursor = conn.cursor()
     cursor.execute(query)
-    print "i am here"
     conn.commit()
     conn.close()
 
@@ -58,12 +54,19 @@ def check_in_medicine_db(name, quantity):
 # check_in_db for login...        
 
 def check_in_db(user_name,password):
-    query = "select * from user_details where uname = '%s' and password = '%s'" %(uname,password)
+    print "i am here"
+    print "i am good"
+    query ="select * from user_signup where name ='%s' and password = '%s'" %(user_name,password)
+    print query
     conn = connect_db()
-    cursor = conn.execute(query)
-
-
-
+    cursor = conn.cursor()
+    cursor.execute(query)
+    results = cursor.fetchall()
+    if not results:
+        return 0
+    else:
+        return render_template('sell_medicine.html')
+    
 
 #login 
 @app.route('/login')
@@ -74,10 +77,13 @@ def login():
 def send_login_data():
     user_name = request.form['uname']
     password = request.form['password']
-    if check_in_db(user_name, password):
+    print "in login:"
+    #print user_name, password
+    if check_in_db(user_name,password):
         return render_template('sell_medicine.html')
     else:
         return render_template('login.html')
+
 
 
 # signup 
@@ -90,9 +96,8 @@ def send_signup_data():
     user_name = request.form['uname']
     password = request.form['password']
     mail = request.form['mail']
-    print user_name, password
     insert_data_to_db(user_name, password)
-    return render_template('add_medicine.html')
+    return render_template('login.html')
 
 
 
@@ -131,5 +136,4 @@ def send_medicine_data():
 
 
 if __name__ == "__main__":
-	app.run()
-
+    app.run()
