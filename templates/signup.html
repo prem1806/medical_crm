@@ -2,26 +2,56 @@
 <head>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script type="text/javascript">
+         function validate() {
+            // user name validation 
+            var name = document.getElementById("name").value;
+            if(name.length <= 1) {
+               alert("Please enter your username");
+               return false;
+            }
+
+
+            //password validation
+            var password = document.getElementById("password").value;
+            alert(password);
+            if(password.length <= 3){
+                alert("please enter strong password");
+                return false;
+            }
+
+           
+            // email validation
+            var email = document.getElementById('email').value;
+            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            if(re.test(email) == false) {
+               alert("please enter correct email");
+               return false;
+            }
+
+            return true;
+         }
+      </script>
 </head>
 {% block body %}
-    <form action = {{url_for('send_signup_data')}} method="POST"> 
+    <form action = {{url_for('send_signup_data')}} method="POST" name="myForm" onsubmit="return validate();"> 
         <h2 class="dark-grey" style="text-align: left; padding-left: 3em"> Singup </h2>
         <div class="col-md-3">
             <br/>
              
                 <div class="form-group col-lg-12">
                     <label>User Name</label>
-                    <input type="text" name="uname" class="form-control">
+                    <input type="text" name="uname" class="form-control" id ="name">
                 </div>
                 
                 <div class="form-group col-lg-12">
                     <label>Password</label>
-                    <input type="password" name="password" class="form-control">
+                    <input type="password" name="password" class="form-control" id="password">
                 </div>
 
                  <div class="form-group col-lg-12">
                     <label>Mail</label>
-                    <input type="text" name="mail" class="form-control">
+                    <input type="text" name="mail" class="form-control" id="email">
                 </div>
                 <div class="form-group col-lg-6" style="padding-left:8em;">
             <input type="submit" name="submit" class="btn btn-primary" id="" value="submit">

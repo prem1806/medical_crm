@@ -27,7 +27,6 @@ def insert_data_to_db(name, quantity, cp, sp):
 
 #insert_data_to_db for signup 
 def insert_data_to_db(user_name,password):
-    print user_name, password
     query = "insert into user_signup (name,password) values('%s','%s')" %(user_name,password)
     conn = connect_db()
     cursor = conn.cursor()
@@ -55,12 +54,6 @@ def check_in_medicine_db(name, quantity):
 # check_in_db for login...        
 
 def check_in_db(user_name,password):
-    query = "select * from user_details where uname = '%s' and password = '%s'" %(user_name,password)
-    conn = connect_db()
-    cursor = conn.execute(query)
-
-
-def check_in_db(user_name,password):
     print "i am here"
     print "i am good"
     query ="select * from user_signup where name ='%s' and password = '%s'" %(user_name,password)
@@ -85,7 +78,7 @@ def send_login_data():
     user_name = request.form['uname']
     password = request.form['password']
     print "in login:"
-    print user_name, password
+    #print user_name, password
     if check_in_db(user_name,password):
         return render_template('sell_medicine.html')
     else:
@@ -103,7 +96,6 @@ def send_signup_data():
     user_name = request.form['uname']
     password = request.form['password']
     mail = request.form['mail']
-    print user_name, password
     insert_data_to_db(user_name, password)
     return render_template('login.html')
 
@@ -144,5 +136,4 @@ def send_medicine_data():
 
 
 if __name__ == "__main__":
-	app.run()
-
+    app.run()
