@@ -2,7 +2,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script type="text/javascript">
+    <script type="text/javascript">
          function validate() {
             // user name validation 
             var name = document.getElementById("name").value;
@@ -15,7 +15,7 @@
             //password validation
             var password = document.getElementById("password").value;
             alert(password);
-            if(password.length <= 3){
+            if(password.length <= 1){
                 alert("please enter strong password");
                 return false;
             }
@@ -31,7 +31,7 @@
 
             return true;
          }
-      </script>
+    </script>
 </head>
 {% block body %}
     <form action = {{url_for('send_signup_data')}} method="POST" name="myForm" onsubmit="return validate();"> 

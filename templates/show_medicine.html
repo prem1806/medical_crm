@@ -1,0 +1,26 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+</head>
+{% block body %}
+        <h4 class="dark-grey" style="text-align: left; padding-left: 3em"> 
+        <table class="table">
+        	<tr>
+        		<td>Medicine name</td>
+        		<td>Quantity</td>
+        		<td>Cost Price</td>
+        		<td>Selling Price</td>
+        	</tr>
+ 			{% for row in results %}
+ 				<tr>
+ 					<td> {{ row[0] }} </td>
+ 					<td> {{ row[1] }} </td>
+ 					<td> {{ row[2] }} </td>
+ 					<td> {{ row[3] }} </td>
+  				</tr>
+ 			{% endfor %}
+        </table>
+        </h4>
+{% endblock %}
+</html>

@@ -16,9 +16,10 @@ def connect_db():
 
 #insert_data_to_db for add table
 
-def insert_data_to_db(name, quantity, cp, sp):
+def insert_data_to_medicine_db(name, quantity, cp, sp):
     query = "insert into medicine_details (name, quantity, cost_price, selling_price) \
              values ('%s', %d, %f, %f)" %(name, quantity, cp, sp)
+    print query
     conn = connect_db()
     conn.execute(query)
     conn.commit()
@@ -33,8 +34,6 @@ def insert_data_to_db(user_name,password):
     cursor.execute(query)
     conn.commit()
     conn.close()
-
-
 
 #chech_in_medicine_db for selling medicine...
 def check_in_medicine_db(name, quantity):
@@ -66,6 +65,25 @@ def check_in_db(user_name,password):
         return 0
     else:
         return render_template('sell_medicine.html')
+
+def get_all_medicines():
+    print "i am here"
+    query = "select * from medicine_details"
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute(query)
+    print query
+    results = cursor.fetchall()
+    cursor.close()
+    print results
+    if not results:
+        return 0
+    else:
+        medicine_list = []
+        for row in results:
+            row = list(row)
+            medicine_list.append(row)
+        return medicine_list
     
 
 #login 
@@ -112,8 +130,10 @@ def show_data():
     medicine_quantity = int(request.form['quantity'])
     medicine_cp = float(request.form['cp'])
     medicine_sp = float(request.form['sp'])
-    insert_data_to_db(medicine_name, medicine_quantity, medicine_cp, medicine_sp)
-    return render_template('add_medicine.html')
+    insert_data_to_medicine_db(medicine_name, medicine_quantity, medicine_cp, medicine_sp)
+    results = get_all_medicines()
+    print results
+    return render_template('show_medicine.html', results=results)
 
 
 #sell medicine
@@ -131,8 +151,6 @@ def send_medicine_data():
         return render_template('show_price.html', total_price=total_price, medicine_name=medicine_name)
     else:
         return render_template('error.html', medicine_name=medicine_name)
-
-
 
 
 if __name__ == "__main__":
