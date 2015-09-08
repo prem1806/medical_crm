@@ -127,7 +127,20 @@ def get_all_medicines():
             row = list(row)
             medicine_list.append(row)
         return medicine_list
-    
+   
+# get search_medicine in the data base
+
+def get_search_medicine(medicine_name):
+    print "i am good"
+    query = "select * from medicine_details where name='%s' " %(name)
+    print "222222"
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    results = results[0]
+    return results
 
 #login 
 @app.route('/login')
@@ -195,6 +208,20 @@ def send_medicine_data():
         return render_template('show_price.html', total_price=total_price, medicine_name=medicine_name)
     else:
         return render_template('error.html', medicine_name=medicine_name)
+
+
+# search a madicine 
+@app.route('/search_medicine')
+def search_medicine():
+    return render_template('search_medicine.html')
+
+@app.route('/search_medicine_data',methods=['GET','POST'])
+def search_medicine_data():
+    print "11111"
+    medicine_name = request.form['mname']
+    results = get_search_medicine(medicine_name)
+    return render_template('show_search_medicine.html',results = results)
+
 
 
 if __name__ == "__main__":

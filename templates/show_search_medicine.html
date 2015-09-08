@@ -1,0 +1,11 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+</head>
+{% block body %}
+        <h4 class="dark-grey" style="text-align: left; padding-left: 3em"> 
+            {{ results }} 
+        </h4>
+{% endblock %}
+</html>
