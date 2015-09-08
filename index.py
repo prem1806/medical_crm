@@ -14,16 +14,59 @@ def connect_db():
     conn = sqlite3.connect(DATABASE)
     return conn    
 
-#insert_data_to_db for add table
-
-def insert_data_to_medicine_db(name, quantity, cp, sp):
-    query = "insert into medicine_details (name, quantity, cost_price, selling_price) \
-             values ('%s', %d, %f, %f)" %(name, quantity, cp, sp)
+# for upadate purpose checking that table containes enter name or not
+def is_present_or_not(name):
+    query = "select * from medicine_details where name='%s'" %(name)
     print query
     conn = connect_db()
-    conn.execute(query)
-    conn.commit()
-    conn.close()
+    cursor = conn.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    print results
+    if not results:
+        return False
+    else:
+        return True
+
+
+def get_quantity(name, quantity):
+    query = "select * from medicine_details where name = '%s'" %(name)
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute(query)
+    results = cursor.fetchall()
+    print results[0]
+    row = list(results[0])
+    return row[1] + quantity
+
+
+#insert_data_to_db for add table
+def insert_data_to_medicine_db(name, quantity, cp, sp):
+    print "i am here"
+    m = is_present_or_not(name)
+    print m
+    if m:
+        print "in true" 
+        quantity = get_quantity(name, quantity)
+        print quantity
+        query = "update medicine_details set quantity = %d, cost_price=%d, \
+                 selling_price=%d where name ='%s'" %(quantity,cp,sp,name)
+        print query
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        print "i am done"
+        conn.commit()
+        cursor.close()
+    else:
+        query = "insert into medicine_details (name, quantity, cost_price, selling_price) \
+                 values ('%s', %d, %f, %f)" %(name, quantity, cp, sp)
+        print query
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        conn.commit()
+        cursor.close()
 
 
 #insert_data_to_db for signup 
@@ -130,6 +173,7 @@ def show_data():
     medicine_quantity = int(request.form['quantity'])
     medicine_cp = float(request.form['cp'])
     medicine_sp = float(request.form['sp'])
+    print "details = ", medicine_name, medicine_quantity, medicine_cp, medicine_sp
     insert_data_to_medicine_db(medicine_name, medicine_quantity, medicine_cp, medicine_sp)
     results = get_all_medicines()
     print results
